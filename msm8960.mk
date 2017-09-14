@@ -81,6 +81,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm8960
 
+# Seccomp policy
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/seccomp/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy \
+    $(LOCAL_PATH)/seccomp/mediaextractor.policy:system/vendor/etc/seccomp_policy/mediaextractor.policy
+
 # WiFi
 PRODUCT_PACKAGES += \
     hostapd \
