@@ -67,6 +67,9 @@ DEVICE_MANIFEST_FILE := device/htc/msm8960-common/manifest.xml
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
+# NFC
+BOARD_NFC_HAL_SUFFIX := msm8960
+
 # Power
 TARGET_POWERHAL_VARIANT := qcom
 
