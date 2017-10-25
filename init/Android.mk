@@ -23,6 +23,10 @@ LOCAL_CFLAGS := -Wall
 
 LOCAL_CFLAGS += -DPLATFORM_SDK_VERSION=$(PLATFORM_SDK_VERSION)
 
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 25; echo $$?),0)
+    LOCAL_WHOLE_STATIC_LIBRARIES += libbase
+endif
+
 LOCAL_SRC_FILES := init_htcCommon.cpp
 LOCAL_MODULE := libinit_htcCommon
 

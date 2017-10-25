@@ -35,10 +35,15 @@
 #include <sys/mount.h>
 
 /*
-Nougat        7.1   API level 25 | .cpp | int property_set(const char *name, const char *value); std::string property_get(const char* name);
-Nougat        7.0   API level 24 | .cpp | int property_set(const char *name, const char *value); std::string property_get(const char* name);
-Marshmallow   6.0   API level 23 | .cpp | int property_set(const char *name, const char *value); int property_get(const char *name, char *value);
-Lollipop      5.1   API level 22 | .c   | int property_set(const char *name, const char *value); int property_get(const char *name, char *value);
+Oreo          8.0.0 API level 26 | .cpp
+    | uint32_t property_set(const std::string& name, const std::string& value);          [system/core/init/property_service.h]
+    | std::string GetProperty(const std::string& key, const std::string& default_value); [<android-base/properties.h>]
+
+                                          [system/core/init/property_service.h]                    [system/core/init/property_service.h]
+Nougat        7.1   API level 25 | .cpp | int property_set(const char *name, const char *value); | std::string property_get(const char* name);
+Nougat        7.0   API level 24 | .cpp | int property_set(const char *name, const char *value); | std::string property_get(const char* name);
+Marshmallow   6.0   API level 23 | .cpp | int property_set(const char *name, const char *value); | int property_get(const char *name, char *value);
+Lollipop      5.1   API level 22 | .c   | int property_set(const char *name, const char *value); | int property_get(const char *name, char *value);
 Lollipop      5.0   API level 21
 KitKat        4.4.4 API level 19
 */
@@ -48,6 +53,14 @@ KitKat        4.4.4 API level 19
     #include "property_service.h"
     }
 #else
+    #if PLATFORM_SDK_VERSION > 25
+        #include <stdarg.h>
+        #include <android-base/logging.h>
+        #include <android-base/properties.h>
+
+        #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+        #include <sys/_system_properties.h>
+    #endif
     #include "property_service.h"
 #endif
 
@@ -55,13 +68,50 @@ KitKat        4.4.4 API level 19
 #include "init_htcCommon.h"
 
 
-#if PLATFORM_SDK_VERSION > 23
+#if PLATFORM_SDK_VERSION > 25
+    int property_get_sdk23(const char *key, char *value)
+    {
+        std::string propvalue;
+        propvalue = android::base::GetProperty(key, "");
+        strcpy(value, propvalue.c_str());
+        return propvalue.length();
+    }
+
+    void ERROR(const char *fmt, ...)
+    {
+        char buffer[128];
+        va_list args;
+
+        va_start(args, fmt);
+        vsnprintf(buffer, sizeof(buffer), fmt, args);
+        va_end(args);
+
+        LOG(ERROR) << buffer;
+    }
+
+    int property_override(const char *name, const char *value)
+    {
+        prop_info *pi;
+
+        pi = (prop_info*) __system_property_find(name);
+        if (pi)
+            return __system_property_update(pi, value, strlen(value));
+        else
+            return __system_property_add(name, strlen(name), value, strlen(value));
+    }
+#elif PLATFORM_SDK_VERSION > 23
     int property_get_sdk23(const char *key, char *value)
     {
         std::string propvalue;
         propvalue = property_get(key);
         strcpy(value, propvalue.c_str());
         return propvalue.length();
+    }
+
+    #undef property_set
+    int property_override(const char *name, const char *value)
+    {
+        return property_set(name, value);
     }
 #else
     // not very efficient but it's the easiest way (?)
@@ -75,6 +125,12 @@ KitKat        4.4.4 API level 19
         else
             value[0] = 0;
         return rc;
+    }
+
+    #undef property_set
+    int property_override(const char *name, const char *value)
+    {
+        return property_set(name, value);
     }
 #endif
 

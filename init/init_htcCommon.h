@@ -39,9 +39,21 @@ extern "C" {
 // due to 'std::string property_get(const char* name)' in sdk24+
 int property_get_sdk23(const char *key, char *value);
 
+// Substitute property_set with property_override
+// For Android 8.0 this will call the property_override (source https://goo.gl/RbFvNT)
+// but for pre Android 8.0 it will just call the normal property_set
+int property_override(const char *name, const char *value);
+#define property_set property_override
+
 // Main function to read ro.build.fingerprint and ro.product.device
 // from /system/build.prop
 void set_props_from_build(void);
+
+// ERROR is deprecated in 8.0 in favor of c++ style: LOG(ERROR) << "text"...
+// add a helper to convert from (fmt, ...) to the new format
+#ifndef ERROR
+    void ERROR(const char *fmt, ...);
+#endif
 
 #ifdef __cplusplus
 }
