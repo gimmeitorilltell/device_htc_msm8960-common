@@ -48,27 +48,27 @@ Lollipop      5.0   API level 21
 KitKat        4.4.4 API level 19
 */
 
-#if PLATFORM_SDK_VERSION < 23
+#if PLATFORM_SDK_VERSION >= 26
+    #include <stdarg.h>
+    #include <android-base/logging.h>
+    #include <android-base/properties.h>
+
+    #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+    #include <sys/_system_properties.h>
+    #include "property_service.h"
+#elif PLATFORM_SDK_VERSION >= 23
+    #include "property_service.h"
+#else
     extern "C" {
     #include "property_service.h"
     }
-#else
-    #if PLATFORM_SDK_VERSION > 25
-        #include <stdarg.h>
-        #include <android-base/logging.h>
-        #include <android-base/properties.h>
-
-        #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
-        #include <sys/_system_properties.h>
-    #endif
-    #include "property_service.h"
 #endif
 
 
 #include "init_htcCommon.h"
 
 
-#if PLATFORM_SDK_VERSION > 25
+#if PLATFORM_SDK_VERSION >= 24
     int property_get_sdk23(const char *key, char *value)
     {
         std::string propvalue;
@@ -99,7 +99,7 @@ KitKat        4.4.4 API level 19
         else
             return __system_property_add(name, strlen(name), value, strlen(value));
     }
-#elif PLATFORM_SDK_VERSION > 23
+#elif PLATFORM_SDK_VERSION >= 22
     int property_get_sdk23(const char *key, char *value)
     {
         std::string propvalue;
@@ -208,3 +208,21 @@ void set_props_from_build(void)
 
     set_ro_product_device();
 }
+
+
+// init_htcCommon.h will rename vendor_load_properties() to real_vendor_load_properties()
+// Call the appropriate real_vendor_load_properties() depending on android version
+#undef vendor_load_properties
+
+#if PLATFORM_SDK_VERSION >= 27
+    // Android 8.1 has to use namespace android::init
+    namespace android {
+    namespace init {
+        void vendor_load_properties() { real_vendor_load_properties(); }
+    }  // namespace init
+    }  // namespace android
+#else
+    extern "C" {
+    void vendor_load_properties() { real_vendor_load_properties(); }
+    }
+#endif
