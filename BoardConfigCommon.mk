@@ -61,6 +61,9 @@ TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
 
+# HIDL
+DEVICE_MANIFEST_FILE := device/htc/msm8960-common/manifest.xml
+
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
