@@ -57,6 +57,9 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 # Charger
 WITH_LINEAGE_CHARGER := false
 
+# Filesystem
+TARGET_FS_CONFIG_GEN := device/htc/msm8960-common/config.fs
+
 # Graphics
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_DISPLAY_USE_RETIRE_FENCE := true
