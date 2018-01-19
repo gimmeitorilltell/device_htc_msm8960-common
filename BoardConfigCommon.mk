@@ -95,5 +95,9 @@ TARGET_RIL_VARIANT := caf
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += chargeled
 
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy/legacy-sepolicy.mk
+
 # USB
 TARGET_USES_LEGACY_ADB_INTERFACE := true
