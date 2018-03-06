@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2012 The CyanogenMod Project
+ * Copyright (C) 2012-2015 The CyanogenMod Project
+ *               2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 #include <cutils/log.h>
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
@@ -39,6 +41,9 @@ static int g_backlight = 255;
 
 char const*const AMBER_LED_FILE = "/sys/class/leds/amber/brightness";
 char const*const GREEN_LED_FILE = "/sys/class/leds/green/brightness";
+
+char const*const BUTTON_FILE = "/sys/class/leds/button-backlight/brightness";
+char const*const BUTTON_CURRENTS_FILE = "/sys/class/leds/button-backlight/currents";
 
 char const*const AMBER_BLINK_FILE = "/sys/class/leds/amber/blink";
 char const*const GREEN_BLINK_FILE = "/sys/class/leds/green/blink";
@@ -215,6 +220,18 @@ static int rgb_to_brightness(struct light_state_t const* state)
           (29 * (color & 0x00ff))) >> 8;
 }
 
+static int set_light_buttons(struct light_device_t* dev,
+                             struct light_state_t const* state) {
+  int err = 0;
+  int brightness = rgb_to_brightness(state);
+  pthread_mutex_lock(&g_lock);
+  err = write_int(BUTTON_FILE, brightness);
+  err = write_int(BUTTON_CURRENTS_FILE, (brightness / 25));
+  pthread_mutex_unlock(&g_lock);
+
+  return 0;
+}
+
 static int set_light_backlight(struct light_device_t* dev,
                                struct light_state_t const* state) {
   int err = 0;
@@ -267,6 +284,8 @@ static int open_lights(const struct hw_module_t* module, char const* name,
 
   if (0 == strcmp(LIGHT_ID_BACKLIGHT, name)) {
     set_light = set_light_backlight;
+  } else if (0 == strcmp(LIGHT_ID_BUTTONS, name)) {
+    set_light = set_light_buttons;
   } else if (0 == strcmp(LIGHT_ID_BATTERY, name)) {
     set_light = set_light_battery;
   } else if (0 == strcmp(LIGHT_ID_ATTENTION, name)) {
@@ -280,6 +299,9 @@ static int open_lights(const struct hw_module_t* module, char const* name,
   pthread_once(&g_init, init_globals);
   dev = malloc(sizeof(struct light_device_t));
   memset(dev, 0, sizeof(struct light_device_t));
+
+  if (!dev)
+    return -ENOMEM;
 
   dev->common.tag = HARDWARE_DEVICE_TAG;
   dev->common.version = 0;
@@ -302,6 +324,6 @@ struct hw_module_t HAL_MODULE_INFO_SYM = {
   .version_minor = 0,
   .id = LIGHTS_HARDWARE_MODULE_ID,
   .name = "Lights module",
-  .author = "The CyanogenMod Project",
+  .author = "The LineageOS Project",
   .methods = &lights_module_methods,
 };

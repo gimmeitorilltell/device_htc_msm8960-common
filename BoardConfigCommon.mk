@@ -77,9 +77,6 @@ TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
 
-# HIDL
-DEVICE_MANIFEST_FILE := device/htc/msm8960-common/manifest.xml
-
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
@@ -90,6 +87,8 @@ BOARD_NFC_HAL_SUFFIX := msm8960
 TARGET_POWERHAL_VARIANT := qcom
 
 # Radio
+BOARD_PROVIDES_LIBRIL := true
+BOARD_RIL_CLASS := ../../../$(PLATFORM_PATH)/ril/
 TARGET_RIL_VARIANT := caf
 
 # Recovery
