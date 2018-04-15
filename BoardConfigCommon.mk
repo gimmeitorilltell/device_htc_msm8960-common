@@ -91,6 +91,7 @@ TARGET_POWERHAL_VARIANT := qcom
 
 # Radio
 TARGET_RIL_VARIANT := caf
+BOARD_RIL_CLASS := ../../../$(PLATFORM_PATH)/ril/
 
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += chargeled
