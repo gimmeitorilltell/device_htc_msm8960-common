@@ -40,11 +40,14 @@ PRODUCT_PACKAGES += \
     android.hardware.audio.effect@2.0-impl \
     android.hardware.soundtrigger@2.0-impl \
     android.hardware.broadcastradio@1.0-impl \
+    audio_amplifier.msm8960 \
     audio.a2dp.default \
     audio.primary.msm8960 \
     audio.r_submix.default \
     audio.usb.default \
     libaudio-resampler \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
     tinymix
 
 # Bluetooth
@@ -55,27 +58,40 @@ PRODUCT_PACKAGES += \
 
 # Display
 PRODUCT_PACKAGES += \
+    libhwc2on1adapter \
     android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service \
     copybit.msm8960 \
     gralloc.msm8960 \
     hwcomposer.msm8960 \
     libgenlock \
+    liboverlay \
     memtrack.msm8960
+
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.0-service.widevine
 
 # GPS
 PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl
+    android.hardware.gnss@1.0-impl \
+    gps.msm8960
 
 # IPv6 tethering
 PRODUCT_PACKAGES += \
     ebtables \
-    ethertypes
+    ethertypes \
+    libxml2 \
+    libcnefeatureconfig
+
+# Keymaster HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-impl \
+    keystore.msm8960
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -89,6 +105,17 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml
+
+# NFC
+PRODUCT_PACKAGES += \
+    com.android.nfc_extras \
+    android.hardware.nfc@1.0-impl \
+    libnfc \
+    libnfc_jni \
+    libnfc_ndef \
+    nfc.msm8960 \
+    Tag \
+    Nfc
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -104,8 +131,8 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
+    android.hardware.power@1.0-service-qti \
     android.hardware.power@1.0-impl \
-    android.hardware.power@1.0-service \
     power.msm8960
 
 # Renderscript
@@ -114,8 +141,8 @@ PRODUCT_PACKAGES += \
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/seccomp/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy \
-    $(LOCAL_PATH)/seccomp/mediaextractor.policy:system/vendor/etc/seccomp_policy/mediaextractor.policy
+    $(LOCAL_PATH)/seccomp/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
+    $(LOCAL_PATH)/seccomp/mediaextractor.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy
 
 # Sensors
 PRODUCT_PACKAGES += \
@@ -129,7 +156,8 @@ PRODUCT_PACKAGES += \
 
 # Usb
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service
+    android.hardware.usb@1.0-service \
+    com.android.future.usb.accessory
 
 # Vibrator
 PRODUCT_PACKAGES += \
@@ -138,10 +166,10 @@ PRODUCT_PACKAGES += \
 # WiFi
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
+    libnetcmdiface \
     hostapd \
-    hostapd.accept \
-    hostapd.deny \
-    hostapd_default.conf \
-    wificond \
     wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant.conf \
+    libwifi-hal-bcm \
+    libwpa_client \
+    wificond
