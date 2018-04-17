@@ -79,6 +79,7 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl \
+    libgps.utils \
     gps.msm8960
 
 # IPv6 tethering
@@ -105,17 +106,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml
-
-# NFC
-PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
-    android.hardware.nfc@1.0-impl \
-    libnfc \
-    libnfc_jni \
-    libnfc_ndef \
-    nfc.msm8960 \
-    Tag \
-    Nfc
 
 # OMX
 PRODUCT_PACKAGES += \
