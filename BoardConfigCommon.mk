@@ -94,8 +94,8 @@ BOARD_RIL_CLASS := ../../../$(PLATFORM_PATH)/ril/
 TARGET_RECOVERY_DEVICE_MODULES += chargeled
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
-include device/qcom/sepolicy/legacy-sepolicy.mk
+# include device/qcom/sepolicy/sepolicy.mk
+# include device/qcom/sepolicy/legacy-sepolicy.mk
 
 # USB
 TARGET_USES_LEGACY_ADB_INTERFACE := true
