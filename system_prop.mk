@@ -2,7 +2,8 @@
 PRODUCT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1 \
     media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true
+    media.stagefright.less-secure=true \
+    camera.disable_treble=true
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -15,10 +16,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Thermal
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.thermal.monitor=true
-
-# OMX
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.media.treble_omx=false
 
 # Radio
 PRODUCT_PROPERTY_OVERRIDES += \
