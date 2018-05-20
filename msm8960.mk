@@ -91,7 +91,6 @@ PRODUCT_PACKAGES += \
 
 # Keymaster HIDL interfaces
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
     keystore.msm8960
 
 # Lights
@@ -121,41 +120,14 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service-qti \
-    android.hardware.power@1.0-impl \
     power.msm8960
-
-# Renderscript
-PRODUCT_PACKAGES += \
-    android.hardware.renderscript@1.0-impl
-
-# Seccomp policy
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/seccomp/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
-    $(LOCAL_PATH)/seccomp/mediaextractor.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy
-
-# Sensors
-PRODUCT_PACKAGES += \
-    android.hardware.sensors@1.0-impl \
-    android.hardware.sensors@1.0-service
-
-# Thermal
-PRODUCT_PACKAGES += \
-    android.hardware.thermal@1.0-impl \
-    android.hardware.thermal@1.0-service
 
 # Usb
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service \
     com.android.future.usb.accessory
-
-# Vibrator
-PRODUCT_PACKAGES += \
-    android.hardware.vibrator@1.0-impl
 
 # WiFi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service \
     libnetcmdiface \
     hostapd \
     wpa_supplicant \
